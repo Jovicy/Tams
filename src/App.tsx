@@ -9,6 +9,7 @@ import PrivacyPage from "./pages/PrivacyPage";
 import RefundPage from "./pages/RefundPage";
 import TermsPage from "./pages/TermsPage";
 import Dashboard from "./pages/Dashboard";
+import KycPage from "./pages/KycPage";
 
 import Login from "./pages/auth/Login";
 import Signup from "./pages/auth/SignUp";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/refunds" element={<RefundPage />} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/kyc" element={<KycPage />} />
         </Route>
 
         {/* Pages WITHOUT Navbar/Footer */}

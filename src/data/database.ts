@@ -7,7 +7,16 @@ import bracelets1 from "../assets/features-img.jpg";
 import necklaces1 from "../assets/header-bg.jpg";
 
 // Features
-import { LuDiamond, LuClock, LuShieldCheck } from "react-icons/lu";
+import {
+  LuDiamond,
+  LuClock,
+  LuShieldCheck,
+  LuPackage,
+  LuClock3,
+  LuUsers,
+  LuWallet,
+  LuShoppingBag,
+} from "react-icons/lu";
 
 export const jewelryCollections = [
   {
@@ -205,3 +214,25 @@ export const paymentPlans = [
   },
 ];
 
+export const stats = [
+  {
+    title: "Total Orders",
+    value: 0,
+    icon: LuShoppingBag,
+  },
+  {
+    title: "Pending Orders",
+    value: 0,
+    icon: LuShoppingBag,
+  },
+  {
+    title: "Active Plans",
+    value: 0,
+    icon: LuUsers,
+  },
+  {
+    title: "Total Committed",
+    value: "₦0",
+    icon: LuWallet,
+  },
+];
