@@ -11,8 +11,6 @@ import {
   LuDiamond,
   LuClock,
   LuShieldCheck,
-  LuPackage,
-  LuClock3,
   LuUsers,
   LuWallet,
   LuShoppingBag,

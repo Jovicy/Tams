@@ -1,4 +1,3 @@
-import React from "react";
 import { paymentPlans } from "../data/database";
 import { LuCalendar, LuSparkles, LuUsers } from "react-icons/lu";
 import { FaWhatsapp } from "react-icons/fa";

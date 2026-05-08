@@ -1,4 +1,3 @@
-import React from 'react'
 import { LuArrowRight, LuCircleAlert, LuShoppingBag, LuUsers } from 'react-icons/lu'
 import { stats } from "../data/database";
 

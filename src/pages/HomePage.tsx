@@ -1,4 +1,3 @@
-import Navigation from "../components/Navigation";
 import heroBg from "../assets/header-bg.jpg";
 import { Link } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";

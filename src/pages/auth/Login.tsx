@@ -1,4 +1,3 @@
-import React from "react";
 import { LuShieldCheck } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
