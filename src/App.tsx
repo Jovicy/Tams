@@ -1,41 +1,45 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import MainLayout from "./layout/MainLayout";
-
-import HomePage from "./pages/HomePage";
-import ProductDetails from "./pages/ProductDetails";
-import ShopPage from "./pages/ShopPage";
-import PlanPage from "./pages/PlanPage";
-import PrivacyPage from "./pages/PrivacyPage";
-import RefundPage from "./pages/RefundPage";
-import TermsPage from "./pages/TermsPage";
-import Dashboard from "./pages/Dashboard";
-import KycPage from "./pages/KycPage";
-
-import Login from "./pages/auth/Login";
-import Signup from "./pages/auth/SignUp";
+import { useEffect } from "react";
+import { BrowserRouter, Routes } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+import { adminRoutes } from "./routes/adminRoutes";
+import { authRoutes } from "./routes/authRoutes";
+import { customerRoutes } from "./routes/customerRoutes";
+import { refreshAuthUserProfile } from "./store/authStore";
 
 function App() {
+  useEffect(() => {
+    void refreshAuthUserProfile();
+  }, []);
+
   return (
     <BrowserRouter>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3500,
+          style: {
+            background: "#111111",
+            color: "#f5f5f5",
+            border: "1px solid rgba(212, 175, 55, 0.2)",
+          },
+          success: {
+            iconTheme: {
+              primary: "#d4af37",
+              secondary: "#111111",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "#111111",
+            },
+          },
+        }}
+      />
       <Routes>
-
-        {/* Pages WITH Navbar + Footer */}
-        <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shop" element={<ShopPage />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/plans" element={<PlanPage />} />
-          <Route path="/privacy" element={<PrivacyPage />} />
-          <Route path="/refunds" element={<RefundPage />} />
-          <Route path="/terms" element={<TermsPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/kyc" element={<KycPage />} />
-        </Route>
-
-        {/* Pages WITHOUT Navbar/Footer */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-
+        {customerRoutes}
+        {authRoutes}
+        {adminRoutes}
       </Routes>
     </BrowserRouter>
   );
