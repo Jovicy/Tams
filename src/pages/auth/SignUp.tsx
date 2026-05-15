@@ -162,13 +162,6 @@ const SignUp = () => {
               Sign in
             </Link>
           </p>
-
-          <p className="mt-3 text-center text-xs text-muted-foreground">
-            Admin accounts are separate.{" "}
-            <Link to="/admin/signup" className="text-primary hover:text-primary/80 font-medium transition-colors">
-              Request access
-            </Link>
-          </p>
         </section>
       </div>
     </div>

@@ -24,27 +24,27 @@ const Navigation = () => {
           <Link to="/" className="flex items-center">
             <span className="font-playfair text-2xl font-extrabold text-primary">Tamara Jewelries</span>
           </Link>
-          {isAuthenticated && (
-            <ul className="hidden items-center gap-6 md:flex">
-              <li>
-                <Link to="/shop" className="text-sm font-medium text-muted-text transition hover:text-primary">
-                  Shop
-                </Link>
-              </li>
+          <ul className="hidden items-center gap-6 md:flex">
+            <li>
+              <Link to="/shop" className="text-sm font-medium text-muted-text transition hover:text-primary">
+                Shop
+              </Link>
+            </li>
 
-              <li>
-                <Link to="/plans" className="text-sm font-medium text-muted-text transition hover:text-primary">
-                  Payment Plans
-                </Link>
-              </li>
+            <li>
+              <Link to="/plans" className="text-sm font-medium text-muted-text transition hover:text-primary">
+                Payment Plans
+              </Link>
+            </li>
 
+            {isAuthenticated && (
               <li>
                 <Link to="/orders/my" className="text-sm font-medium text-muted-text transition hover:text-primary">
                   My Orders
                 </Link>
               </li>
-            </ul>
-          )}
+            )}
+          </ul>
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
@@ -89,7 +89,11 @@ const Navigation = () => {
               Payment Plans
             </Link>
 
-            {isAuthenticated && <>{/* Installments and Contributions removed */}</>}
+            {isAuthenticated && (
+              <Link to="/orders/my" onClick={() => setIsOpen(false)}>
+                My Orders
+              </Link>
+            )}
 
             <div className="border-t border-border/40" />
 

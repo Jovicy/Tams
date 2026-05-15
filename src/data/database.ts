@@ -1,5 +1,9 @@
 // Features
 import { LuDiamond, LuClock, LuShieldCheck, LuWallet, LuShoppingBag } from "react-icons/lu";
+import RingImage from "../assets/rings.jpg";
+import EarringsImage from "../assets/earrings.jpg";
+import NecklacesImage from "../assets/necklaces.jpg";
+import BraceletsImage from "../assets/bracelets.jpg";
 
 export const paymentOptions = [
   {
@@ -113,8 +117,8 @@ export const stats = [
 ];
 
 export const jewelryCollections = [
-  { name: "Gold Rings", image: "/src/assets/rings.jpg" },
-  { name: "Earrings", image: "/src/assets/earrings.jpg" },
-  { name: "Necklaces", image: "/src/assets/necklaces.jpg" },
-  { name: "Bracelets", image: "/src/assets/bracelets.jpg" },
+  { name: "Gold Rings", image: RingImage },
+  { name: "Earrings", image: EarringsImage },
+  { name: "Necklaces", image: NecklacesImage },
+  { name: "Bracelets", image: BraceletsImage },
 ];

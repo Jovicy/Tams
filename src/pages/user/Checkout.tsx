@@ -279,7 +279,7 @@ export default function CheckoutPage() {
       });
 
       // Redirect to WhatsApp after successful order creation
-      const whatsappUrl = `https://wa.me/07019438002?text=${encodeURIComponent(whatsappMessage)}`;
+      const whatsappUrl = `https://wa.me/2348056469938?text=${encodeURIComponent(whatsappMessage)}`;
       window.open(whatsappUrl, "_blank");
     } catch (error) {
       console.error("Failed to create order:", error);

@@ -3,7 +3,6 @@ import { getCurrentUser, signInAdminUser, signInUser, signUpUser, type ApiAuthUs
 
 const AUTH_SESSION_STORAGE_KEY = "tams_auth_session";
 const AUTH_STORAGE_KEY = "tams_customer_logged_in";
-const AUTH_UPDATED_EVENT = "tams-auth-updated";
 let authProfileRefreshPromise: Promise<AuthSession | null> | null = null;
 
 export interface AuthUser {
@@ -101,8 +100,6 @@ function persistAuthState(nextState: AuthState) {
   } else {
     window.localStorage.setItem(AUTH_STORAGE_KEY, "true");
   }
-
-  window.dispatchEvent(new Event(AUTH_UPDATED_EVENT));
 }
 
 function emitChange() {
@@ -122,7 +119,6 @@ function syncFromStorage() {
 
 if (typeof window !== "undefined") {
   window.addEventListener("storage", syncFromStorage);
-  window.addEventListener(AUTH_UPDATED_EVENT, syncFromStorage);
 }
 
 function subscribe(listener: () => void) {

@@ -26,6 +26,8 @@ export const customerRoutes = (
       <Route path="/faq" element={<FaqPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="/shop" element={<ShopPage />} />
+      <Route path="/plans" element={<PlanPage />} />
     </Route>
 
     <Route
@@ -34,9 +36,7 @@ export const customerRoutes = (
           <MainLayout />
         </UserRouteGuard>
       }>
-      <Route path="/shop" element={<ShopPage />} />
       <Route path="/product/:id" element={<ProductDetails />} />
-      <Route path="/plans" element={<PlanPage />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/kyc" element={<KycPage />} />
       <Route path="/profile" element={<ProfilePage />} />
