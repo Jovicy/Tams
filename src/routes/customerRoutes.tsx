@@ -16,6 +16,7 @@ import KycPage from "../pages/user/KycPage";
 import ProfilePage from "../pages/user/Profile";
 import OrderTrackingPage from "../pages/user/OrderTracking";
 import CheckoutPage from "../pages/user/Checkout";
+import RefundPage from "../pages/RefundPage";
 
 export const customerRoutes = (
   <>
@@ -26,6 +27,7 @@ export const customerRoutes = (
       <Route path="/faq" element={<FaqPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/terms" element={<TermsPage />} />
+      <Route path="/refunds" element={<RefundPage />} />
       <Route path="/shop" element={<ShopPage />} />
       <Route path="/plans" element={<PlanPage />} />
     </Route>

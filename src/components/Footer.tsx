@@ -40,7 +40,7 @@ const Footer = () => {
                 </div>
             </div>
             <div className="container mx-auto px-4 mt-12 pt-8 border-t border-border/50 text-sm text-muted-foreground text-center">
-                <p>&copy; {new Date().getFullYear()} Gold Journey. All rights reserved.</p>
+                <p>&copy; {new Date().getFullYear()} Tamara Jewelries. All rights reserved.</p>
             </div>
         </footer>
     )

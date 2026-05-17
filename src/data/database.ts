@@ -1,25 +1,71 @@
 // Features
-import { LuDiamond, LuClock, LuShieldCheck, LuWallet, LuShoppingBag } from "react-icons/lu";
+import {
+  LuDiamond,
+  LuClock,
+  LuShieldCheck,
+  LuWallet,
+  LuShoppingBag,
+  LuZap,
+  LuUsers,
+  LuGift,
+  LuCalendarClock,
+} from "react-icons/lu";
 import RingImage from "../assets/rings.jpg";
 import EarringsImage from "../assets/earrings.jpg";
 import NecklacesImage from "../assets/necklaces.jpg";
 import BraceletsImage from "../assets/bracelets.jpg";
 
+export const whyChooseTamara = [
+  {
+    title: "Instant Purchase",
+    desc: "Ready-to-own pieces available for immediate checkout. Pay in full and your order is processed right away.",
+    icon: LuZap,
+  },
+  {
+    title: "Installment Plans",
+    desc: "Lock in your price today and spread payment over 3–12 months. Receive your piece once fully paid.",
+    icon: LuClock,
+  },
+  {
+    title: "Ajo / Adashi Groups",
+    desc: "Join a trusted community savings circle. Contribute monthly and receive your gold jewelry at maturity.",
+    icon: LuUsers,
+  },
+  {
+    title: "Authentic Gold Collections",
+    desc: "Every piece is carefully selected — 18k and 22k gold jewelry you can wear with confidence and pride.",
+    icon: LuDiamond,
+  },
+  {
+    title: "Secure & Reliable",
+    desc: "All payments are manually verified. Your contributions are tracked and protected from start to finish.",
+    icon: LuShieldCheck,
+  },
+  {
+    title: "For Every Occasion",
+    desc: "Gifts, weddings, celebrations, or personal luxury — we have elegant pieces for every meaningful moment.",
+    icon: LuGift,
+  },
+];
+
 export const paymentOptions = [
   {
-    icon: LuDiamond,
-    title: "Full Payment",
-    description: "Purchase outright and have your piece processed immediately. The traditional way to own gold.",
+    icon: LuShoppingBag,
+    title: "Buy Instantly",
+    description:
+      "Purchase outright and have your piece processed immediately. The fastest way to own your gold.",
   },
   {
-    icon: LuClock,
+    icon: LuCalendarClock,
     title: "Installment Plans",
-    description: "Lock in the price today and pay over 3 to 6 months. Receive your piece upon completion of payment.",
+    description:
+      "Spread your payment over 3–12 months. Lock in today's price and receive your piece at completion.",
   },
   {
-    icon: LuShieldCheck,
-    title: "Thrift Contributions (Ajo)",
-    description: "Join a trusted circle to save towards your gold goals. Community-powered purchasing with guaranteed security.",
+    icon: LuUsers,
+    title: "Ajo / Adashi Savings Groups",
+    description:
+      "Join a trusted circle and save towards your gold goals. Community-powered purchasing with guaranteed security.",
   },
 ];
 
@@ -27,7 +73,8 @@ export const paymentPlans = [
   {
     id: 1,
     name: "Tamara 20k Gold Slot",
-    description: "Perfect for first-time gold buyers looking to save gradually for simple gold jewelry pieces.",
+    description:
+      "Perfect for first-time gold buyers looking to save gradually for simple gold jewelry pieces.",
     monthly: 20000,
     months: 12,
     total: 240000,
@@ -39,7 +86,8 @@ export const paymentPlans = [
   {
     id: 2,
     name: "Tamara 50k Gold Slot",
-    description: "Ideal for customers targeting premium bracelets, necklaces, and medium-value jewelry collections.",
+    description:
+      "Ideal for customers targeting premium bracelets, necklaces, and medium-value jewelry collections.",
     monthly: 50000,
     months: 12,
     total: 600000,
@@ -51,7 +99,8 @@ export const paymentPlans = [
   {
     id: 3,
     name: "Tamara 100k Gold Slot",
-    description: "Designed for luxury gold lovers seeking high-value jewelry with structured monthly contributions.",
+    description:
+      "Designed for luxury gold lovers seeking high-value jewelry with structured monthly contributions.",
     monthly: 100000,
     months: 12,
     total: 1200000,
@@ -63,7 +112,8 @@ export const paymentPlans = [
   {
     id: 4,
     name: "Tamara 200k Gold Slot",
-    description: "A premium contribution plan tailored for serious investors and exclusive custom jewelry purchases.",
+    description:
+      "A premium contribution plan tailored for serious investors and exclusive custom jewelry purchases.",
     monthly: 200000,
     months: 12,
     total: 2400000,
@@ -75,7 +125,8 @@ export const paymentPlans = [
   {
     id: 5,
     name: "Tamara 500k Gold Slot",
-    description: "An elite high-value gold investment circle for luxury collectors and top-tier jewelry acquisition.",
+    description:
+      "An elite high-value gold investment circle for luxury collectors and top-tier jewelry acquisition.",
     monthly: 500000,
     months: 12,
     total: 6000000,
@@ -87,7 +138,8 @@ export const paymentPlans = [
   {
     id: 6,
     name: "Tamara Bridal Slot",
-    description: "Specially curated for brides-to-be saving toward complete bridal jewelry sets and wedding luxury pieces.",
+    description:
+      "Specially curated for brides-to-be saving toward complete bridal jewelry sets and wedding luxury pieces.",
     monthly: 150000,
     months: 12,
     total: 1800000,
