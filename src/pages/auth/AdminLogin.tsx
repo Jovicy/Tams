@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { LuBadgeCheck, LuLoaderCircle, LuUsers } from "react-icons/lu";
+import PasswordInput from "../../components/PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
 import { notifyError, notifyResponse } from "../../lib/notification";
 import { signInAdmin, useAuthStore } from "../../store/authStore";
@@ -47,8 +48,7 @@ export default function AdminLogin() {
                 placeholder="admin@example.com"
                 className="w-full h-11 px-3 rounded-md border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
-              <input
-                type="password"
+              <PasswordInput
                 value={formData.password}
                 onChange={(event) => setFormData((current) => ({ ...current, password: event.target.value }))}
                 placeholder="Password"

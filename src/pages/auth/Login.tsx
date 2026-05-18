@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { LuShieldCheck, LuLoaderCircle } from "react-icons/lu";
+import PasswordInput from "../../components/PasswordInput";
 import { Link, useNavigate } from "react-router-dom";
 import { signIn, useAuthStore } from "../../store/authStore";
 import { notifyError, notifyResponse } from "../../lib/notification";
@@ -60,11 +61,10 @@ const Login = () => {
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">Password</label>
 
-              <input
-                type="password"
-                placeholder="••••••••"
+              <PasswordInput
                 value={formData.password}
                 onChange={(event) => setFormData((current) => ({ ...current, password: event.target.value }))}
+                placeholder="••••••••"
                 className="w-full h-11 px-3 rounded-md border border-border bg-background text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
