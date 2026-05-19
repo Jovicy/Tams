@@ -129,7 +129,7 @@ const RefundPage = () => {
                     <p>To initiate a refund or return:</p>
 
                     <ul className="list-decimal pl-5 mt-3 space-y-2">
-                        <li>Contact our support team via WhatsApp at +234 801 234 5678</li>
+                        <li>Contact our support team via WhatsApp at +234 805 646 9938</li>
                         <li>Provide your order reference number and reason for return</li>
                         <li>Await confirmation and return instructions</li>
                         <li>Ship the item using a trackable courier service</li>
@@ -143,8 +143,8 @@ const RefundPage = () => {
                     </h2>
 
                     <p>
-                        For refund-related enquiries, contact us at support@tamara.com
-                        or via WhatsApp at +234 801 234 5678. We aim to respond within
+                        For refund-related enquiries, contact us at support@tamaraandfraser.com.ng
+                        or via WhatsApp at +234 805 646 9938. We aim to respond within
                         24 hours on business days.
                     </p>
                 </section>

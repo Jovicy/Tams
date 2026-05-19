@@ -9,7 +9,7 @@ const HomePage = () => {
   return (
     <>
       {/* Hero Section */}
-      <header className="relative min-h-[100vh] flex items-center justify-center bg-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${heroBg})` }}>
+      <header className="relative min-h-[120vh] flex items-center justify-center bg-center bg-cover bg-no-repeat" style={{ backgroundImage: `url(${heroBg})` }}>
         {/* Overlay */}
         <div className="absolute inset-0 bg-black/70"></div>
 

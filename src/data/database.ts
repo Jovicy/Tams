@@ -137,10 +137,10 @@ export const paymentPlans = [
 
   {
     id: 6,
-    name: "Tamara Bridal Slot",
+    name: "Tamara Gift Set Slot",
     description:
-      "Specially curated for brides-to-be saving toward complete bridal jewelry sets and wedding luxury pieces.",
-    monthly: 150000,
+      "Specially curated for brides and gifting purposes.",
+    monthly: 700000,
     months: 12,
     total: 1800000,
     members: 5,

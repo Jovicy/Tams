@@ -123,7 +123,7 @@ export default function ShopPage() {
       {/* HEADER */}
       <section className="mb-12 text-center max-w-2xl mx-auto">
         <h1 className="font-playfair text-4xl md:text-5xl font-bold mb-4">The Collection</h1>
-        <p className="text-muted-text">Explore our curated selection of fine 18k and 22k gold jewelry.</p>
+        <p className="text-muted-text">Explore our curated selection of fine elegant jewelries.</p>
       </section>
 
       {/* FILTER + SEARCH */}

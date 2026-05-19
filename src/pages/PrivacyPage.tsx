@@ -150,8 +150,8 @@ const PrivacyPage = () => {
 
                     <p>
                         For privacy-related enquiries, contact us at
-                        privacy@tamarainvest.com or via WhatsApp
-                        at +234 801 234 5678.
+                        privacy@tamaraandfraser.com.ng or via WhatsApp
+                        at +234 805 646 9938.
                     </p>
                 </section>
 
