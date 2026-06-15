@@ -59,6 +59,7 @@ export default function AdminProducts() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isLoadingProducts, setIsLoadingProducts] = useState(true);
+  const [togglingId, setTogglingId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
@@ -85,13 +86,13 @@ export default function AdminProducts() {
     updatedAt: product.updatedAt,
   });
 
-  const refreshProducts = async (page = currentPage, size = pageSize) => {
+  const refreshProducts = async (page?: number, size?: number) => {
+    const targetPage = page ?? currentPage;
+    const targetSize = size ?? pageSize;
     setIsLoadingProducts(true);
-
     try {
-      const response = await listProducts({ page, pageSize: size });
+      const response = await listProducts({ page: targetPage, pageSize: targetSize });
       const nextProducts = (response.data.products ?? response.data.items ?? []).map(mapApiProductToAdminProduct);
-
       setProducts(nextProducts);
       setTotalProducts(response.data.pagination?.total ?? response.data.pagination?.totalItems ?? nextProducts.length);
       setTotalPages(response.data.pagination?.totalPages ?? 1);
@@ -114,7 +115,7 @@ export default function AdminProducts() {
   };
 
   useEffect(() => {
-    refreshProducts();
+    refreshProducts(currentPage, pageSize);
   }, [currentPage, pageSize]);
 
   useEffect(() => {
@@ -142,19 +143,21 @@ export default function AdminProducts() {
         karat: formData.karat || "18K",
         plans: selectedPlans,
         installmentDurations: selectedPlans.includes("installment") ? selectedDurations : [],
-        isActive: formData.isActive ?? true,
+        isActive: true,
         isFeatured: formData.isFeatured ?? false,
         file: selectedFile,
       });
 
-      const nextProducts = [...products, mapApiProductToAdminProduct(response.data)];
-      setProducts(nextProducts);
       notifyResponse({ status: response.status, message: response.message });
       setFormData(defaultFormData);
       setSelectedFile(null);
       setIsCreating(false);
-    } catch (error) {
-      notifyError(error, "Unable to create product.");
+      setCurrentPage(1);
+      await refreshProducts(1, pageSize);
+    } catch (error: any) {
+      // Give a helpful message for name conflicts
+      const is409 = error?.response?.status === 409 || error?.status === 409;
+      notifyError(error, is409 ? "A product with this name already exists. Please use a different name." : "Unable to create product.");
     } finally {
       setIsSubmitting(false);
     }
@@ -267,18 +270,34 @@ export default function AdminProducts() {
     }));
   };
 
-  const handleToggleStatus = (productId: number) => {
-    setProducts((current) =>
-      current.map((product) =>
-        product.id === productId
-          ? {
-              ...product,
-              isActive: !product.isActive,
-              updatedAt: new Date().toISOString(),
-            }
-          : product,
-      ),
-    );
+  const handleToggleStatus = async (product: AdminProduct) => {
+    setTogglingId(product.id);
+
+    const plans = (product.plans ?? ["Full"]).map((p) => p.toLowerCase() as "full" | "installment" | "thrift");
+    const durations = (product.installmentDurations ?? []).filter((v): v is 3 | 6 => v === 3 || v === 6);
+
+    try {
+      const response = await updateProduct(product.id, {
+        name: product.name,
+        description: product.description || "",
+        price: product.price,
+        categoryId: Number(product.categoryId),
+        weight: product.weight || "",
+        karat: product.karat || "18K",
+        plans,
+        installmentDurations: plans.includes("installment") ? durations : [],
+        isActive: !product.isActive,
+        isFeatured: product.isFeatured,
+      });
+
+      const updated = mapApiProductToAdminProduct(response.data);
+      setProducts((current) => current.map((p) => (p.id === product.id ? updated : p)));
+      notifyResponse({ status: response.status, message: response.message });
+    } catch (error) {
+      notifyError(error, "Unable to update product status.");
+    } finally {
+      setTogglingId(null);
+    }
   };
 
   const viewingProduct = products.find((p) => p.id === viewingId);
@@ -477,12 +496,14 @@ export default function AdminProducts() {
                       {product.isActive ? "Active" : "Inactive"}
                     </span>
                     <button
-                      onClick={() => handleToggleStatus(product.id)}
-                      className="ml-2 inline-flex items-center rounded-md border border-border px-2 py-1 text-[11px] font-semibold text-muted-text transition hover:border-primary hover:text-primary">
-                      Toggle
+                      onClick={() => handleToggleStatus(product)}
+                      disabled={togglingId === product.id}
+                      className="ml-2 inline-flex items-center rounded-md border border-border px-2 py-1 text-[11px] font-semibold text-muted-text transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50">
+                      {togglingId === product.id ? "Saving..." : "Toggle"}
                     </button>
                   </td>
-                  <td className="flex justify-end gap-2 px-6 py-4">
+                  <td className="px-6 py-4">
+                      <div className="flex justify-end gap-2">
                     <button
                       onClick={() => setViewingId(product.id)}
                       className="inline-flex items-center gap-2 rounded-md border border-blue-500/30 px-3 py-2 text-xs text-blue-400 transition hover:bg-blue-500/10">
@@ -501,7 +522,7 @@ export default function AdminProducts() {
                       <LuTrash2 className="h-4 w-4" />
                       Delete
                     </button>
-                  </td>
+                  </div></td>
                 </tr>
               ))}
             </tbody>
@@ -593,9 +614,10 @@ export default function AdminProducts() {
 
             <div className="flex gap-3 border-t border-border/60 pt-6">
               <button
-                onClick={() => handleToggleStatus(viewingProduct.id)}
-                className="flex-1 rounded-md border border-border px-4 py-2 text-sm font-semibold text-muted-text transition hover:border-primary hover:text-primary">
-                {viewingProduct.isActive ? "Deactivate" : "Activate"}
+                onClick={() => handleToggleStatus(viewingProduct)}
+                disabled={togglingId === viewingProduct.id}
+                className="flex-1 rounded-md border border-border px-4 py-2 text-sm font-semibold text-muted-text transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50">
+                {togglingId === viewingProduct.id ? "Saving..." : viewingProduct.isActive ? "Deactivate" : "Activate"}
               </button>
               <button
                 onClick={() => {

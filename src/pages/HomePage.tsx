@@ -100,10 +100,11 @@ const HomePage = () => {
 
           {/* Collections Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {jewelryCollections.map((item: { name: string; image: string }, index: number) => (
-              <div
+            {jewelryCollections.map((item: { name: string; image: string; path: string }, index: number) => (
+              <Link
+                to={item.path}
                 key={index}
-                className="relative h-[400px] rounded-xl overflow-hidden group cursor-pointer"
+                className="relative h-100 rounded-xl overflow-hidden group cursor-pointer block"
                 style={{
                   backgroundImage: `url(${item.image})`,
                   backgroundSize: "cover",
@@ -116,13 +117,14 @@ const HomePage = () => {
                 <div className="absolute bottom-6 left-6 z-10">
                   <h3 className="font-playfair text-2xl md:text-3xl font-semibold text-white">{item.name}</h3>
                 </div>
+
                 {/* Arrow Button */}
                 <div className="absolute bottom-6 right-6 z-10 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
                   <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-black shadow-md transform transition group-hover:scale-110">
                     <FaArrowRight />
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         </div>
