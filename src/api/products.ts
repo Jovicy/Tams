@@ -161,7 +161,7 @@ export async function listProducts(filters: ProductListFilters = {}) {
     ...(filters.pageSize !== undefined && {
       take: filters.pageSize,
     }),
-    ...(filters.search !== undefined && {
+    ...(filters.search !== "" && {
       search: filters.search,
     }),
   };
