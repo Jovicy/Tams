@@ -10,10 +10,10 @@ import {
   LuGift,
   LuCalendarClock,
 } from "react-icons/lu";
-import RingImage from "../assets/rings.jpg";
-import EarringsImage from "../assets/earrings.jpg";
-import NecklacesImage from "../assets/necklaces.jpg";
-import BraceletsImage from "../assets/bracelets.jpg";
+import RingImage from "../assets/rings-001.jpg";
+import EarringsImage from "../assets/earrings-001.jpg";
+import NecklacesImage from "../assets/necklace-001.jpg";
+import BraceletsImage from "../assets/bracelet-001.jpg";
 
 export const whyChooseTamara = [
   {
@@ -137,10 +137,10 @@ export const paymentPlans = [
 
   {
     id: 6,
-    name: "Tamara Bridal Slot",
+    name: "Tamara Gift Set Slot",
     description:
-      "Specially curated for brides-to-be saving toward complete bridal jewelry sets and wedding luxury pieces.",
-    monthly: 150000,
+      "Specially curated for brides and gifting purposes.",
+    monthly: 700000,
     months: 12,
     total: 1800000,
     members: 5,
@@ -169,8 +169,8 @@ export const stats = [
 ];
 
 export const jewelryCollections = [
-  { name: "Gold Rings", image: RingImage },
-  { name: "Earrings", image: EarringsImage },
-  { name: "Necklaces", image: NecklacesImage },
-  { name: "Bracelets", image: BraceletsImage },
+  { name: "Gold Rings", image: RingImage, path: "/shop?category=rings" },
+  { name: "Earrings", image: EarringsImage, path: "/shop?category=earrings" },
+  { name: "Necklaces", image: NecklacesImage, path: "/shop?category=necklace" },
+  { name: "Bracelets", image: BraceletsImage, path: "/shop?category=bracelets" },
 ];

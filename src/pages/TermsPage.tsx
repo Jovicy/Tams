@@ -166,8 +166,8 @@ const TermsPage = () => {
 
                     <p>
                         For questions regarding these Terms, contact us via
-                        WhatsApp at +234 801 234 5678 or email
-                        support@tamarainvest.com.
+                        WhatsApp at +234 805 646 9938 or email
+                        support@tamaraandfraser.com.ng
                     </p>
                 </section>
 
