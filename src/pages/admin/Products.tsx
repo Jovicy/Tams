@@ -305,7 +305,7 @@ export default function AdminProducts() {
 
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-sm text-muted-text">
-            <span>Page size</span>
+            <span>Product Count</span>
             <select
               value={pageSize}
               onChange={(event) => {

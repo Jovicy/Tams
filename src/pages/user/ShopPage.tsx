@@ -130,7 +130,7 @@ export default function ShopPage() {
           />
         </div>
         <label className="flex items-center gap-2 text-sm text-muted-text">
-          <span>Page size</span>
+          <span>Product Count</span>
           <select
             value={pageSize}
             onChange={(event) => {
@@ -188,13 +188,17 @@ export default function ShopPage() {
               {/* Image as background */}
               <div className="relative aspect-4/5 rounded-xl overflow-hidden mb-4 border border-border">
                 <div
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-105"
-                  style={{
-                    backgroundImage: `url(${item.image ?? item.imageUrl})`,
-                  }}
+                  className={`absolute inset-0 bg-cover bg-center transition-transform duration-700 ${item.isActive ? "group-hover:scale-105" : "grayscale opacity-60"}`}
+                  style={{ backgroundImage: `url(${item.image ?? item.imageUrl})` }}
                 />
-
                 <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                {/* Sold Out overlay banner */}
+                {!item.isActive && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="bg-black/75 text-white text-xs font-bold uppercase tracking-widest px-4 py-2 rounded-full border border-white/20 backdrop-blur-sm">Sold Out</span>
+                  </div>
+                )}
               </div>
 
               {/* Content */}
@@ -202,8 +206,8 @@ export default function ShopPage() {
                 <h3 className="font-playfair font-semibold text-lg line-clamp-1 group-hover:text-primary transition-colors mb-1">{item.name}</h3>
 
                 <div className="mb-2">
-                  <span className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold ${item.isActive ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
-                    {item.isActive ? "Available" : "Inactive"}
+                  <span className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold ${item.isActive ? "bg-green-500/20 text-green-400" : "bg-zinc-500/20 text-zinc-400"}`}>
+                    {item.isActive ? "Available" : "Sold Out"}
                   </span>
                 </div>
 
