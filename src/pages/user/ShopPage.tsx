@@ -33,11 +33,15 @@ const defaultPlansByProductId: Record<number, string[]> = {
 };
 
 export default function ShopPage() {
-  const [activeCategoryId, setActiveCategoryId] = useState<number | "all">("all");
+  const [activeCategoryId, setActiveCategoryId] = useState<number>(-1);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [products, setProducts] = useState<AdminProduct[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const mapApiProduct = (item: ApiProduct): AdminProduct => ({
     id: item.id,
@@ -60,17 +64,21 @@ export default function ShopPage() {
   });
 
   useEffect(() => {
-    let isMounted = true;
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
 
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
     const loadShopData = async () => {
       setIsLoading(true);
-
-      const [productsResult, categoriesResult] = await Promise.allSettled([listProducts({ page: 1, pageSize: 200 }), listCategories({ skip: 0, take: 200 })]);
-
-      if (!isMounted) return;
+      const [productsResult, categoriesResult] = await Promise.allSettled([listProducts({ page: currentPage, pageSize, categoryId: activeCategoryId, search: debouncedSearch }), listCategories()]);
 
       if (productsResult.status === "fulfilled") {
         const apiProducts = (productsResult.value.data.products ?? productsResult.value.data.items ?? []).map(mapApiProduct);
+        setTotalPages(productsResult.value.data.pagination?.totalPages ?? productsResult.value.data.pagination?.totalPages ?? apiProducts.length);
         setProducts(apiProducts);
       } else {
         setProducts([]);
@@ -78,6 +86,7 @@ export default function ShopPage() {
 
       if (categoriesResult.status === "fulfilled") {
         const apiCategories = categoriesResult.value.data.categories ?? categoriesResult.value.data.items ?? [];
+
         setCategories(apiCategories);
       } else {
         setCategories([]);
@@ -87,11 +96,7 @@ export default function ShopPage() {
     };
 
     loadShopData();
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  }, [currentPage, pageSize, activeCategoryId, debouncedSearch]);
 
   const derivedCategoryTabs = Array.from(
     new Map(
@@ -101,22 +106,7 @@ export default function ShopPage() {
     ).values(),
   );
 
-  const categoryTabs = [
-    { id: "all" as const, label: "All Pieces" },
-    ...(categories.length > 0 ? categories.map((category) => ({ id: String(category.id), label: category.name })) : derivedCategoryTabs),
-  ];
-
-  const filteredProducts = products.filter((item) => {
-    const activeCategoryKey = activeCategoryId === "all" ? "all" : String(activeCategoryId);
-    const matchesCategory = activeCategoryKey === "all" || String(item.categoryId) === activeCategoryKey;
-
-    const normalizedSearch = search.trim().toLowerCase();
-    const searchTargets = [item.name, item.description, item.category ?? "", item.slug];
-
-    const matchesSearch = normalizedSearch.length === 0 || searchTargets.some((value) => value?.toLowerCase().includes(normalizedSearch));
-
-    return matchesCategory && matchesSearch;
-  });
+  const categoryTabs = [{ id: -1, label: "All Pieces" }, ...(categories.length > 0 ? categories.map((category) => ({ id: String(category.id), label: category.name })) : derivedCategoryTabs)];
 
   return (
     <div className="container mx-auto px-4 py-12">
@@ -126,14 +116,44 @@ export default function ShopPage() {
         <p className="text-muted-text">Explore our curated selection of fine 18k and 22k gold jewelry.</p>
       </section>
 
-      {/* FILTER + SEARCH */}
+      {/* PAGINATION + SEARCH */}
+      <div className="flex items-end md:items-center gap-3 justify-between pb-3 flex-col md:flex-row">
+        {/* Search */}
+        <div className="relative w-full md:w-64">
+          <LuSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search collection..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="w-full pl-10 pr-4 py-2 rounded-full bg-card border border-border outline-none"
+          />
+        </div>
+        <label className="flex items-center gap-2 text-sm text-muted-text">
+          <span>Page size</span>
+          <select
+            value={pageSize}
+            onChange={(event) => {
+              setCurrentPage(1);
+              setPageSize(Number(event.target.value));
+            }}
+            className="rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary">
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </label>
+      </div>
+
+      {/* FILTER  */}
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-8">
         {/* Categories */}
         <div className="flex overflow-x-auto pb-2 -mx-4 px-4 md:mx-0 md:px-0 md:pb-0 w-full md:w-auto hide-scrollbar gap-2">
           {categoryTabs.map((category) => (
             <button
               key={String(category.id)}
-              onClick={() => setActiveCategoryId(category.id === "all" ? "all" : Number(category.id))}
+              onClick={() => setActiveCategoryId(category.id ? Number(category.id) : -1)}
               className={`
                                 inline-flex items-center justify-center
                                 px-4 py-2 rounded-full text-sm font-medium
@@ -146,36 +166,24 @@ export default function ShopPage() {
 
                                 border border-white/20
 
-                                ${(activeCategoryId === "all" ? "all" : String(activeCategoryId)) === String(category.id) ? "bg-primary text-black border-primary" : "text-muted-foreground hover:text-white hover:border-primary hover:bg-accent"}
+                                ${(activeCategoryId === -1 ? -1 : String(activeCategoryId)) === String(category.id) ? "bg-primary text-black border-primary" : "text-muted-foreground hover:text-white hover:border-primary hover:bg-accent"}
                             `}>
               {category.label}
             </button>
           ))}
-        </div>
-
-        {/* Search */}
-        <div className="relative w-full md:w-64">
-          <LuSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="Search collection..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 rounded-full bg-card border border-border outline-none"
-          />
         </div>
       </div>
 
       {/* PRODUCTS GRID */}
       {isLoading ? (
         <Preloader title="Loading products" message="Fetching collection from the server..." />
-      ) : filteredProducts.length === 0 ? (
+      ) : products.length === 0 ? (
         <div className="rounded-2xl border border-border bg-card p-10 text-center">
           <p className="text-sm text-muted-text">No products match your selected category and search.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-6 gap-y-10">
-          {filteredProducts.map((item) => (
+          {products.map((item) => (
             <Link to={`/product/${item.id}`} key={item.id} className={`group flex flex-col ${item.isActive ? "" : "opacity-70"}`}>
               {/* Image as background */}
               <div className="relative aspect-4/5 rounded-xl overflow-hidden mb-4 border border-border">
@@ -211,6 +219,41 @@ export default function ShopPage() {
               </div>
             </Link>
           ))}
+        </div>
+      )}
+
+      {!isLoading && totalPages > 1 && (
+        <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card px-4 py-4 mt-4 md:flex-row md:items-center md:justify-between">
+          <p className="text-sm text-muted-text">
+            Page {currentPage} of {totalPages}
+          </p>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setCurrentPage((current) => Math.max(1, current - 1))}
+              disabled={currentPage <= 1}
+              className="rounded-md border border-border px-3 py-2 text-sm text-muted-text transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50">
+              Previous
+            </button>
+
+            {Array.from({ length: totalPages }, (_, index) => index + 1)
+              .slice(Math.max(0, currentPage - 2), Math.min(totalPages, currentPage + 2))
+              .map((pageNumber) => (
+                <button
+                  key={pageNumber}
+                  onClick={() => setCurrentPage(pageNumber)}
+                  className={`rounded-md px-3 py-2 text-sm transition ${pageNumber === currentPage ? "bg-primary text-black" : "border border-border text-muted-text hover:border-primary hover:text-primary"}`}>
+                  {pageNumber}
+                </button>
+              ))}
+
+            <button
+              onClick={() => setCurrentPage((current) => Math.min(totalPages, current + 1))}
+              disabled={currentPage >= totalPages}
+              className="rounded-md border border-border px-3 py-2 text-sm text-muted-text transition hover:border-primary hover:text-primary disabled:cursor-not-allowed disabled:opacity-50">
+              Next
+            </button>
+          </div>
         </div>
       )}
     </div>

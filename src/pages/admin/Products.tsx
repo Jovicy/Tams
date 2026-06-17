@@ -22,7 +22,7 @@ interface AdminProduct {
 }
 import Modal from "../../components/Modal";
 import Preloader from "../../components/Preloader.tsx";
-import { createProduct, deleteProduct, listProducts, updateProduct, type ApiProduct } from "../../api/products";
+import { createProduct, deleteProduct, listProducts, updateProduct, updateProductStatus, type ApiProduct } from "../../api/products";
 import { listCategories, type Category } from "../../api/categories";
 import { notifyError, notifyResponse } from "../../lib/notification";
 
@@ -267,18 +267,29 @@ export default function AdminProducts() {
     }));
   };
 
-  const handleToggleStatus = (productId: number) => {
-    setProducts((current) =>
-      current.map((product) =>
-        product.id === productId
-          ? {
-              ...product,
-              isActive: !product.isActive,
-              updatedAt: new Date().toISOString(),
-            }
-          : product,
-      ),
-    );
+  const handleToggleStatus = async (productId: number) => {
+    try {
+      const product = products.find((p) => p.id === productId);
+
+      if (!product) return;
+
+      const newStatus = !product.isActive;
+
+      await updateProductStatus(productId, newStatus);
+
+      setProducts((current) =>
+        current.map((item) =>
+          item.id === productId
+            ? {
+                ...item,
+                isActive: newStatus,
+              }
+            : item,
+        ),
+      );
+    } catch (error) {
+      console.error("Failed to update product status:", error);
+    }
   };
 
   const viewingProduct = products.find((p) => p.id === viewingId);
@@ -472,7 +483,7 @@ export default function AdminProducts() {
                   <td className="px-6 py-4 font-medium text-foreground">{product.name}</td>
                   <td className="px-6 py-4 text-muted-text">₦{product.price.toLocaleString()}</td>
                   <td className="px-6 py-4 text-muted-text">{product.weight}</td>
-                  <td className="px-6 py-4">
+                  <td className="px-6 py-4 space-y-2">
                     <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${product.isActive ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
                       {product.isActive ? "Active" : "Inactive"}
                     </span>

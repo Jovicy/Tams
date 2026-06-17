@@ -6,9 +6,9 @@ export interface ProductListFilters {
   categoryId?: number;
   isActive?: boolean;
   isFeatured?: boolean;
-  search?: string;
   page?: number;
   pageSize?: number;
+  search?: string;
 }
 
 export interface CreateProductPayload {
@@ -125,7 +125,7 @@ function appendProductFormData(formData: FormData, payload: CreateProductPayload
   }
 }
 
-export function createProduct(payload: CreateProductPayload) {
+export async function createProduct(payload: CreateProductPayload) {
   const formData = new FormData();
 
   appendProductFormData(formData, payload);
@@ -133,7 +133,7 @@ export function createProduct(payload: CreateProductPayload) {
   return apiClient.post<CreateProductResponse>("/products", formData);
 }
 
-export function updateProduct(id: number, payload: UpdateProductPayload) {
+export async function updateProduct(id: number, payload: UpdateProductPayload) {
   const formData = new FormData();
 
   appendProductFormData(formData, payload);
@@ -141,18 +141,29 @@ export function updateProduct(id: number, payload: UpdateProductPayload) {
   return apiClient.patch<UpdateProductResponse>(`/products/${id}`, formData);
 }
 
-export function deleteProduct(id: number) {
+export async function updateProductStatus(id: number, isActive: boolean) {
+  return apiClient.patch<UpdateProductResponse>(`/products/${id}/status`, { isActive });
+}
+
+export async function deleteProduct(id: number) {
   return apiClient.delete<DeleteProductResponse>(`/products/${id}`);
 }
 
-export function listProducts(filters: ProductListFilters = {}) {
+export async function listProducts(filters: ProductListFilters = {}) {
   const query = {
-    ...(filters.categoryId !== undefined ? { categoryId: filters.categoryId } : {}),
+    ...(filters.categoryId !== -1 ? { categoryId: filters.categoryId } : {}),
     ...(filters.isActive !== undefined ? { isActive: filters.isActive } : {}),
     ...(filters.isFeatured !== undefined ? { isFeatured: filters.isFeatured } : {}),
-    ...(filters.search ? { search: filters.search } : {}),
-    ...(filters.page !== undefined ? { page: filters.page } : {}),
-    ...(filters.pageSize !== undefined ? { pageSize: filters.pageSize } : {}),
+    ...(filters.page !== undefined &&
+      filters.pageSize !== undefined && {
+        skip: (filters.page - 1) * filters.pageSize,
+      }),
+    ...(filters.pageSize !== undefined && {
+      take: filters.pageSize,
+    }),
+    ...(filters.search !== undefined && {
+      search: filters.search,
+    }),
   };
 
   return apiClient.get<ListProductsResponse>("/products", { query }).catch((error) => {
@@ -164,7 +175,7 @@ export function listProducts(filters: ProductListFilters = {}) {
   });
 }
 
-export function getProductById(id: number) {
+export async function getProductById(id: number) {
   return apiClient.get<GetProductResponse>(`/products/${id}`).catch((error) => {
     if (error instanceof ApiError && (error.status === 404 || error.status === 405)) {
       return apiClient.get<GetProductResponse>(`/api/products/${id}`);
